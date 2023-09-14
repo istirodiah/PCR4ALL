@@ -23,7 +23,6 @@ def model(opparams, init_vals, period, params, t, index):
     beta  = opparams[:6]    
     theta = opparams[6:12]  
     alpha = opparams[12:18] 
-    # delta = opparams[18:]
 
     betav  = beta * np.array([0.0, 0.2 , 0.5 , 0.5, 0.6, 0.6])
     betab  = beta * np.array([0.0, 0.0 , 0.4, 0.4, 0.25, 0.25]) # normal case
@@ -140,11 +139,11 @@ c   = np.array([[2.021E-07, 7.763E-08, 4.520E-08, 4.789E-08, 2.909E-08, 4.994E-0
 kappa    = np.array([0.4, 0.4, 0.8, 0.8, 0.8, 0.8])
 rho      = np.array([0.0001, 0.001, 0.1, 0.3, 0.4, 0.5])
 alpha    = np.array([0.025, 0.003, 0.012, 0.025, 0.099, 0.262])
-delta    = np.array([0.01, 0.05, 0.063, 0.376, 0.545, 0.709]) #np.array([0.005 , 0.015 , 0.025, 0.188 , 0.2725, 0.3545])#0.5 * np.array([0.01, 0.05, 0.063, 0.376, 0.545, 0.709])#np.array([0.05, 0.05, 0.063, 0.122, 0.303, 0.709])
+delta    = np.array([0.01, 0.05, 0.063, 0.376, 0.545, 0.709]) 
 sigma    = 0.10
 phi      = 0.20
 eta      = 0. #0.40
-beta     = np.array([0.0474986, 0.09716402, 0.07156201, 0.0664224, 0.04255577, 0.0645]) #0.6*np.array([0.02691644, 0.06744003, 0.09427002, 0.1285704 , 0.15575962, 0.85])#5 * np.array([0.01493689, 0.0187243 , 0.0197207 , 0.01965221, 0.01581639, 0.02185509])
+beta     = np.array([0.0474986, 0.09716402, 0.07156201, 0.0664224, 0.04255577, 0.0645]) 
 theta    = np.array([9.16091458e-06, 9.16091458e-06, 3.95604731e-04, 6.58625427e-05, 4.96556745e-03, 2.36730805e-02])
 gamma    = np.array([0.0, 0.0, 0.0, 3.13666771e-04, 0.0, 1.60165839e-04])
 nu       = np.array([0.0, 0.0, 0.00, 2.13666771e-05, 1.87118193e-04, 8.36108712e-03])
@@ -166,12 +165,9 @@ N = 83166711         # worldometer data
 N = N * np.array([0.0470, 0.0920, 0.2280, 0.3500, 0.2150, 0.0680])
 
 file1 = pd.ExcelFile('ScenarioNew.xlsx')
-df4 = file1.parse(2)#11 #Init
+df4 = file1.parse(2) #Init
 init_vals = df4.values[:,1:7]
 init_vals = init_vals.astype(float)
-# init_vals[6]  = 0.8*idata[-1]/N
-# init_vals[8]  = 0.1*idata[-1]/N
-# init_vals[9]  = 0.1*idata[-1]/N
 init_vals[10] = 0.8*hdata[-1]/N
 init_vals[11] = 0.1*hdata[-1]/N
 init_vals[12] = 0.1*hdata[-1]/N
@@ -189,8 +185,6 @@ epsilon  = np.array([0., 0.02, 0.05, 0.05, 0.05, 0.05])
 epsilonv = np.array([0., 0., 0., 0., 0., 0.0])
 # epsilonv = np.array([0., 0., 0.04, 0.04, 0.05, 0.05])
 
-# epsilonv = np.array([0., 0., 0.04, 0.04, 0.195*14., 0.191*14.])
-
 params   = c, kappa, rho, delta, sigma, phi, gamma, eta, nu, delta, epsilon, epsilonv
 modelparams = init_vals, period, params, N, t
 S_0, V_0, B_0, E_0, Ev_0, Eb_0, I_0, A_0, Iv_0, Ib_0, H_0, Hv_0, Hb_0, U_0, Uv_0, Ub_0, L_0, F_0, R_0, D_0, Ns_0, Nh_0, Nu_0 = init_vals
@@ -198,43 +192,19 @@ S, V, B, E, Ev, Eb, I, A, Iv, Ib, H, Hv, Hb, U, Uv, Ub, L, F, R, D, Ns, Nh, Nu =
  
 ft  = np.arange(0, 52*7, 7)
 
-w1 = -1*np.log(0.4)/(6*30)#-1*np.log(0.4)/(6*30)# -1*np.log(0.7)/(6*30)
+w1 = -1*np.log(0.4)/(6*30)# -1*np.log(0.7)/(6*30)
 w2 = 0#-1*np.log(0.8)/(6*30)# 1
-   
-# tt = 52*10
-# pd = np.zeros((tt,6))
-# dum = tt*7
-# ft  = np.linspace(0, dum, int(dum/dt)+1)  
 
-# par[:6]    = par[:6]*1.1
                  
 fS, fV, fB, fE, fEv, fEb, fI, fA, fIv, fIb, fH, fHv, fHb, fU, fUv, fUb, fL, fF, fR, fD, fNs, fNh, fNu = init_vals
-for i,k in enumerate(ft):
+for i, k in enumerate(ft):
     dummyt = np.linspace(0, 7, 8)
     
-    # j = i%52
-    
-    par[:6]    = par[:6]*coef[i,:6]*(1+w1)  ######
-    par[6:12]  = par[6:12]*coef[i,6:12]#*(1+w2)
-    par[12:18] = par[12:18]*coef[i,12:18]#*(1+w2)
+    par[:6]    = par[:6]*coef[i,:6]*(1+w1)  
+    par[6:12]  = par[6:12]*coef[i,6:12]*(1+w2)
+    par[12:18] = par[12:18]*coef[i,12:18]*(1+w2)
     par[par>1] = 1
     
-    # if i%24 == 23:
-    #     par[:6] = par[:6]*coef[j,:6] * 0.075
-    #     par[par>1] = 1
-    # else:
-    #     par[:6] = par[:6]*coef[j,:6] 
-    #     par[par>1] = 1
-    
-    # if i == 39:
-    #     par[:6]    = par[:6]*0.9
-    # if i == 39:
-    #     par[:6]    = par[:6]*1.1
-    # if i == 43:
-    #     par[:6]    = par[:6]*1.2
-    
-    # pd[i] = par[:6]
-        
     
     nS, nV, nB, nE, nEv, nEb, nI, nA, nIv, nIb, nH, nHv, nHb, nU, nUv, nUb, nL, nF, nR, nD, nNs, nNh, nNu = model(par, init_vals, period, params, dummyt, i)
     init_vals = nS[-1], nV[-1], nB[-1], nE[-1], nEv[-1], nEb[-1], nI[-1], nA[-1], nIv[-1], nIb[-1], nH[-1], nHv[-1], nHb[-1], nU[-1], nUv[-1], nUb[-1], nL[-1], nF[-1], nR[-1], nD[-1], nNs[-1], nNh[-1], nNu[-1]
@@ -268,7 +238,6 @@ zNh = fNh[::7]*N
 zD  = fD[::7]*N
 zI  = fI[::7]*N
 zNs = np.zeros((53,6))
-# zNd = np.zeros((tt-4,6))
 
 for i in range(52):
     # zNd[i+1] = zD[i+1] - zD[i]
@@ -276,142 +245,14 @@ for i in range(52):
 zNs[0] = idata[-1]
 # zNd[0] = ddata[-1]
 
-# df8 = file1.parse(5)
-# cdf = df8.values[6:,1:]
-# cdf = abs(cdf.astype(float))
-# zZh = np.zeros((tt-4,6))
-# zZd = np.zeros((tt-4,6))
-# zZh[0] = hdata[-1]
-# zZd[0] = ddata[-1]
-# for i in range(tt-5):
-#     zZh[i+1] = zNs[i]*cdf[i,:6]
-#     zZd[i+1] = zZh[i+1]*cdf[i,6:12]
-
 
 color = ['orange', 'green', 'cyan', 'blue', 'grey', 'red']
 label = ['0-4 years', '5-14 years', '15-34 years', '35-59 years', '60-79 years', '80+ years']
 
 for i in range(6):
-    # plt.plot(np.arange(1,6),idata[-5:,i], color=color[i], label=label[i]) 
     plt.plot(times/7,zNs[:,i], color=color[i], label=label[i])
 plt.xlabel('Week')
 plt.ylabel('New Cases')
-# plt.xticks(np.arange(1, 53, step=4))
-# plt.ylim(0, 600000)
 plt.legend(bbox_to_anchor=(1.04,1), borderaxespad=0, loc="upper left",fontsize='medium')
 plt.show()
 
-# for i in range(6):
-#     plt.plot(np.arange(1,6),hdata[-5:,i], color=color[i], label=label[i]) 
-#     plt.plot(np.arange(5,53),zZh[:,i], color=color[i])
-# plt.xlabel('Week')
-# plt.ylabel('Hospitalizations')
-# plt.xticks(np.arange(1, 53, step=4))
-# # plt.ylim(0, 600000)
-# plt.legend(bbox_to_anchor=(1.04,1), borderaxespad=0, loc="upper left",fontsize='medium')
-# plt.show()
-
-# for i in range(6):
-#     plt.plot(np.arange(1,6),ddata[-5:,i], color=color[i], label=label[i]) 
-#     plt.plot(np.arange(5,53),zZd[:,i], color=color[i])
-# plt.xlabel('Week')
-# plt.ylabel('New Deaths')
-# plt.xticks(np.arange(1, 53, step=4))
-# # plt.ylim(0, 600000)
-# plt.legend(bbox_to_anchor=(1.04,1), borderaxespad=0, loc="upper left",fontsize='medium')
-# plt.show()
-
-
-# for i in range(6):
-#     plt.plot(np.arange(1,6),hdata[-5:,i], color=color[i], label=label[i]) 
-#     plt.plot(np.arange(5,53),zNh[:,i], color=color[i])
-# plt.xlabel('Week')
-# plt.ylabel('Hospitalizations')
-# plt.xticks(np.arange(1, 53, step=4))
-# # plt.ylim(0, 600000)
-# plt.legend(bbox_to_anchor=(1.04,1), borderaxespad=0, loc="upper left",fontsize='medium')
-# plt.show()
-
-# for i in range(6):
-#     plt.plot(np.arange(1,6),ddata[-5:,i], color=color[i], label=label[i]) 
-#     plt.plot(np.arange(5,53),zNd[:,i], color=color[i])
-# plt.xlabel('Week')
-# plt.ylabel('New Deaths')
-# plt.xticks(np.arange(1, 53, step=4))
-# # plt.ylim(0, 600000)
-# plt.legend(bbox_to_anchor=(1.04,1), borderaxespad=0, loc="upper left",fontsize='medium')
-# plt.show()
-
-# for i in range(6):
-#     plt.plot(np.arange(1,6),hdata[-5:,i], color=color[i], label=label[i]) 
-#     plt.plot(np.arange(5,53),zZh[:,i], color=color[i])
-# plt.xlabel('Week')
-# plt.ylabel('Hospitalizations')
-# plt.xticks(np.arange(1, 53, step=4))
-# # plt.ylim(0, 600000)
-# plt.legend(bbox_to_anchor=(1.04,1), borderaxespad=0, loc="upper left",fontsize='medium')
-# plt.show()
-
-# for i in range(6):
-#     plt.plot(np.arange(1,6),ddata[-5:,i], color=color[i], label=label[i]) 
-#     plt.plot(np.arange(5,53),zZd[:,i], color=color[i])
-# plt.xlabel('Week')
-# plt.ylabel('New Deaths')
-# plt.xticks(np.arange(1, 53, step=4))
-# # plt.ylim(0, 600000)
-# plt.legend(bbox_to_anchor=(1.04,1), borderaxespad=0, loc="upper left",fontsize='medium')
-# plt.show()
-
-# file = pd.ExcelFile('ScenarioNew.xlsx')
-# df1  = file.parse(6) 
-# df2  = file.parse(7) 
-# df3  = file.parse(8) 
-# df4  = file.parse(9)
-
-# sc0  = df1.values[1:, 7]
-# sc1  = df2.values[1:, 7]
-# sc2  = df3.values[1:, 7]
-# sc3  = df4.values[1:, 7]
-
-# plt.plot(np.arange(1,53), sc0/1000, linewidth = 2, label='No new variant') 
-# plt.plot(np.arange(1,53), sc1/1000, linewidth = 2, label='Scenario 1') 
-# plt.plot(np.arange(1,53), sc2/1000, linewidth = 2, label='Scenario 2') 
-# plt.plot(np.arange(1,53), sc3/1000, linewidth = 2, label='Scenario 3') 
-# plt.xlabel('Week')
-# plt.ylabel('New Cases per 1000 people')
-# plt.xticks(np.arange(1, 53, step=4))
-# plt.legend(bbox_to_anchor=(1.04,1), borderaxespad=0, loc="upper left",fontsize='medium')
-# plt.show()
-    
-# sc0  = df1.values[1:, 15]
-# sc1  = df2.values[1:, 15]
-# sc2  = df3.values[1:, 15]
-# sc3  = df4.values[1:, 15]
-
-# plt.plot(np.arange(1,53), sc0, linewidth = 2, label='No new variant') 
-# plt.plot(np.arange(1,53), sc1, linewidth = 2, label='Scenario 1') 
-# plt.plot(np.arange(1,53), sc2, linewidth = 2, label='Scenario 2') 
-# plt.plot(np.arange(1,53), sc3, linewidth = 2, label='Scenario 3') 
-# plt.xlabel('Week')
-# plt.ylabel('Hospitalizations')
-# plt.xticks(np.arange(1, 53, step=4))
-# plt.legend(bbox_to_anchor=(1.04,1), borderaxespad=0, loc="upper left",fontsize='medium')
-# plt.show()
-    
-# sc0  = df1.values[1:, 23]
-# sc1  = df2.values[1:, 23]
-# sc2  = df3.values[1:, 23]
-# sc3  = df4.values[1:, 23]
-
-# plt.plot(np.arange(1,53), sc0, linewidth = 2, label='No new variant') 
-# plt.plot(np.arange(1,53), sc1, linewidth = 2, label='Scenario 1') 
-# plt.plot(np.arange(1,53), sc2, linewidth = 2, label='Scenario 2') 
-# plt.plot(np.arange(1,53), sc3, linewidth = 2, label='Scenario 3') 
-# plt.xlabel('Week')
-# plt.ylabel('New Deaths')
-# plt.xticks(np.arange(1, 53, step=4))
-# plt.legend(bbox_to_anchor=(1.04,1), borderaxespad=0, loc="upper left",fontsize='medium')
-# plt.show()
-    
-    
-   
