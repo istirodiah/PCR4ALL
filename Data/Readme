@@ -1,1 +1,5 @@
-
+Hospitalization data per Bundes and age : https://github.com/robert-koch-institut/COVID-19-Hospitalisierungen_in_Deutschland/blob/master/Aktuell_Deutschland_COVID-19-Hospitalisierungen.csv
+Deaths per Bundes : https://github.com/robert-koch-institut/COVID-19-Todesfaelle_in_Deutschland/blob/main/COVID-19-Todesfaelle_Bundeslaender.csv
+Deaths per age : https://github.com/robert-koch-institut/COVID-19-Todesfaelle_in_Deutschland/blob/main/COVID-19-Todesfaelle_Altersgruppen.csv
+Infection per Bundes and age : https://github.com/robert-koch-institut/COVID-19_7-Tage-Inzidenz_in_Deutschland/blob/main/COVID-19-Faelle_7-Tage-Inzidenz_Bundeslaender.csv
+Infection per Bundes, age, and gender : https://survstat.rki.de/Content/Query/Main.aspx
